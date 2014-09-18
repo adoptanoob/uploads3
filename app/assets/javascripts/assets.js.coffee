@@ -7,7 +7,7 @@ jQuery ->
       types = /(\.|\/)(dxf)$/i
       file = data.files[0]
       if types.test(file.type) || types.test(file.name)
-        data.context = $(tmpl("template-upload", file))
+        data.context = $($.parseHTML(tmpl("template-upload", file))[1])
         $('#fileupload').append(data.context)
         data.submit()
       else
