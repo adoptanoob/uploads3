@@ -1,0 +1,10 @@
+<div class="asset">
+  <div class="frame">
+    <%= link_to "See #{asset.name}", asset if asset.asset_url %>
+  </div>
+  <div class="name"><%= asset.name %></div>
+  <div class="actions">
+    <%= link_to "edit", edit_asset_path(asset) %> |
+    <%= link_to "remove", asset, :confirm => 'Are you sure?', :method => :delete %>
+  </div>
+</div>

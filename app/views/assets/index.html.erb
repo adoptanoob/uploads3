@@ -1,0 +1,17 @@
+<h1>Asset Gallery</h1>
+
+<div id="assets">
+  <%= render @assets if @assets %>
+</div>
+<div class="clear"></div>
+
+<%= s3_uploader_form post: assets_url, as: "asset[asset_url]" do %>
+  <%= file_field_tag :file, multiple: true %>
+<% end %>
+
+<script id="template-upload" type="text/x-tmpl">
+<div class="upload">
+  {%=o.name%}
+  <div class="progress"><div class="bar" style="width: 0%"></div></div>
+</div>
+</script>
