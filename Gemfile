@@ -9,6 +9,9 @@ gem 'aws-sdk'
 gem 'foreman'
 gem 'jquery-fileupload-rails'
 gem 'rails_12factor'
+gem 'devise'
+gem 'ancestry'
+gem 'jquery-ui-rails'
 
 gem 'unicorn', '4.8.3' # make sure you follow installation instructions for this gem
 gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'

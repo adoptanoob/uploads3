@@ -1,21 +1,16 @@
-<%= form_for @asset do |f| %>
-  <% if @asset.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@asset.errors.count, "error") %> prohibited this asset from being saved:</h2>
-      <ul>
-      <% @asset.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_for @asset, :html => {:multipart => true} do |f| %>
+  <%= f.error_messages %>
+  
 
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </div>
   <p>
-    <%= f.file_field :asset %>
+    <%= f.file_field :uploaded_file%><br />
+  </p>
+  <p>
+    <%= f.hidden_field :folder_id %>
   </p>
   <div class="actions">
     <%= f.submit %>

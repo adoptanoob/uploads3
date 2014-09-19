@@ -1,26 +1,47 @@
+require 'open-uri'
+
+
 class AssetsController < ApplicationController
-    def index
-    @assets = Asset.all
+  before_filter :authenticate_user!
+
+
+  def index
+    @assets = current_user.assets
   end
 
   def show
-    @asset = Asset.find(params[:id])
+    @asset = current_user.assets.find(params[:id])
   end
 
   def new
-    @asset = Asset.new
+    @asset = current_user.assets.new
+    if params[:folder_id]
+      @current_folder = current_user.folders.find(params[:folder_id])
+      @asset.folder_id = @current_folder.id
+    end  
   end
 
   def create
-    @asset = Asset.create(asset_params)
+    @asset = current_user.assets.new(asset_params)
+    if @asset.save
+      flash[:notice] = "Successfully uploaded the file."
+
+      if @asset.folder # checking if we have a parent folder for this file
+        redirect_to browse_path(@asset.folder) # then we redirect to the parent folder
+      else
+        redirect_to root_url
+      end
+    else
+      render :new
+    end
   end
 
   def edit
-    @asset = Asset.find(params[:id])
+    @asset = current_user.assets.find(params[:id])
   end
 
   def update
-    @asset = Asset.find(params[:id])
+    @asset = current_user.assets.find(params[:id])
     if @asset.update_attributes(asset_params)
       redirect_to assets_url, notice: "Asset was successfully updated."
     else
@@ -29,14 +50,41 @@ class AssetsController < ApplicationController
   end
 
   def destroy
-    @asset = Asset.find(params[:id])
+    @asset = current_user.assets.find(params[:id])
+    @parent_folder = @asset.folder 
     @asset.destroy
-    redirect_to assets_url, notice: "Asset was successfully destroyed."
+    flash[:notice] = "Asset was successfully destroyed."
+    if @parent_folder
+      redirect_to browse_path(@parent_folder)
+    else
+      redirect_to root_url
+    end
   end
 
+  def get
+    # first find the asset within own assets
+    asset = current_user.assets.find_by_id(params[:id])
+
+    # if not found in own assets, check if the current_user has share access to the parent folder of the file
+    asset ||= Asset.find(params[:id]) if current_user.has_share_access?(Asset.find_by_id(params[:id]).folder)
+
+    if asset
+      # Parse the URL for special characters first before downloading
+      data = open(asset.uploaded_file.url)
+      
+      # use the send_data method to send the above bindary "data" as a file
+      send_data data, :filename => asset.file_name
+
+      #redirect to amazon S3 url which will let the user download the file automatically  
+      # redirect_to asset.uploaded_file.url, :type => asset.uploaded_file_content_type
+    else
+      flash[:error] = "Don't be cheeky! Mind your own assets!" + ":Rails_ROOT/config/amazon_s3.yml"
+      redirect_to assets_path
+    end
+  end
     private
 
   def asset_params
-    params.require(:asset).permit(:asset_url, :name)
+    params.require(:asset).permit(:asset_url, :name, :user_id, :folder_id)
   end
 end
