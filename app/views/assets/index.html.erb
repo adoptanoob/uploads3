@@ -11,7 +11,7 @@
   </tr>
   <% for asset in @assets %>
     <tr>
-      <td><%= link_to asset.uploaded_file_file_name, :controller => :assets, :action => :get, :target => :_blank %></td>
+      <td><%= link_to 'Download', asset.uploaded_file.url %></td>
       <td><%= link_to "Show", asset %></td>
       <td><%= link_to "Edit", edit_asset_path(asset) %></td>
       <td><%= link_to "Destroy", asset, :confirm => 'Are you sure?', :method => :delete %></td>
@@ -22,7 +22,7 @@
 <p><%= link_to "New Asset", new_asset_path %></p>
 
 
-<%= s3_uploader_form post: download_url, as: "asset[asset_url]" do %>
+<%= s3_uploader_form post: assets_url, as: "asset[asset_url]" do %>
   <%= file_field_tag :file, multiple: true %>
 <% end %>
 

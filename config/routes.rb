@@ -5,21 +5,23 @@ Rails.application.routes.draw do
   resources :folders
 
     
-  #this route is for file downloads  
-  get '/assets/:id', to: 'assets#get', as: 'download'
+  #this route is for file downloads
+  match "assets/get/:id" => "assets#get", via: :get, :as => "download"  
+  # get '/assets/:id', to: 'assets#get', as: 'download'
+  # match 'gallery_:id' => 'gallery#show', :via => [:get], :as => 'gallery_show'
 
 
-  # match "browse/:folder_id" => "home#browse", :as => "browse"
-  get 'browse/:folder_id', to: 'home#browse', as: 'browse'
+  match "browse/:folder_id" => "home#browse", via: :get, :as => "browse"
+  # get 'browse/:folder_id', to: 'home#browse', as: 'browse'
 
-  # match "browse/:folder_id/new_folder" => "folders#new", :as => "new_sub_folder"
-  get 'browse/:folder_id/new_folder', to: 'folders#new', as: 'new_sub_folder'
+  match "browse/:folder_id/new_folder" => "folders#new", via: :get, :as => "new_sub_folder"
+  # get 'browse/:folder_id/new_folder', to: 'folders#new', as: 'new_sub_folder'
 
-  # match "browse/:folder_id/new_file" => "assets#new", :as => "new_sub_file"
-  get 'browse/:folder_id/new_file', to: 'assets#new', as: 'new_sub_file'
+  match "browse/:folder_id/new_file" => "assets#new", via: :get, :as => "new_sub_file"
+  # get 'browse/:folder_id/new_file', to: 'assets#new', as: 'new_sub_file'
 
-  # match "browse/:folder_id/rename" => "folders#edit", :as => "rename_folder"
-  get 'browse/:folder_id/rename', to: 'folders#edit', as: 'rename_folder'
+  match "browse/:folder_id/rename" => "folders#edit", via: :get, :as => "rename_folder"
+  # get 'browse/:folder_id/rename', to: 'folders#edit', as: 'rename_folder'
   # for sharing the folder
  
 
