@@ -5,7 +5,7 @@
   <div class="name"><%= asset.name %></div>
   <div class="actions">
     <%= link_to "edit", edit_asset_path(asset) %> |
-     <%= link_to "download", asset if asset.asset_url %> |
+     <%= link_to "download", asset.asset_url if asset.asset_url %> |
     <%= link_to "remove", asset, :confirm => 'Are you sure?', :method => :delete %>
   </div>
 </div>
